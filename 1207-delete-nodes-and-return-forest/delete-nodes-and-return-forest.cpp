@@ -11,47 +11,28 @@
  */
 class Solution {
 public:
-    TreeNode* solve(TreeNode* &root,vector<int> to_delete,vector<TreeNode*> &ans){
+    TreeNode* solve(TreeNode* root,unordered_set<int> &to_delete_set,vector<TreeNode*>& ans){
         if(root == NULL){
             return NULL;
         }
-        TreeNode* leftSide = solve(root->left,to_delete,ans);
-        TreeNode* rightSide = solve(root->right,to_delete,ans);
-        for(int i=0;i<to_delete.size();i++){
-            if(to_delete[i] == root->val){
-                if(leftSide == NULL && rightSide== NULL){
-                    return NULL;
-                }
-                else{
-                    if(leftSide){
-                        ans.push_back(root->left);
-                    }
-                    if(rightSide){
-                        ans.push_back(root->right);
-                    }
-                    return NULL;
-                }
+        root->left = solve(root->left,to_delete_set,ans);
+        root->right = solve(root->right,to_delete_set,ans);
+
+        if(to_delete_set.count(root->val)){
+            if(root->left){
+                ans.push_back(root->left);
             }
-        }
-        if(leftSide == NULL){
-            root->left = NULL;
-        }
-        
-        if(rightSide == NULL){
-            root->right = NULL;
+            if(root->right){
+                ans.push_back(root->right);
+            }
+            return NULL;
         }
         return root;
     }
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        unordered_set<int> to_delete_set(to_delete.begin(), to_delete.end());
         vector<TreeNode*> ans;
-        solve(root,to_delete,ans);
-        bool involveRoot = true;
-        for(int i=0;i<to_delete.size();i++){
-            if(to_delete[i] == root->val){
-                involveRoot = false;
-            }
-        }
-        if(involveRoot){
+        if(solve(root,to_delete_set,ans)){
             ans.push_back(root);
         }
         return ans;
