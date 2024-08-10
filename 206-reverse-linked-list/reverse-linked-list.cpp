@@ -10,23 +10,22 @@
  */
 class Solution {
 public:
-    ListNode* solve(ListNode* head,ListNode* &head2){
-        if(head->next == NULL){
-            head2 = head;
-            return head;
+    ListNode* solve(ListNode* head1,ListNode* &head2){
+        if(head1->next == NULL){
+            head2 = head1;
+            return head1;
         }
-        ListNode* temp = solve(head->next,head2);
-        temp->next = head;
-        return head;
+        ListNode* temp = solve(head1->next,head2);
+        temp->next = head1;
+        return head1;
     }
     ListNode* reverseList(ListNode* head) {
-        
-        ListNode* head2 = NULL;
-        if(head == NULL || head->next == NULL){
+        if(head == NULL || head ->next == NULL){
             return head;
         }
-        ListNode* last = solve(head,head2);
-        last->next = NULL;
+        ListNode* head2 = NULL;
+        ListNode* a = solve(head,head2);
+        a->next = NULL;
         return head2;
     }
 };
