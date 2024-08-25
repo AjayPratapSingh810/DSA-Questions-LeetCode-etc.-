@@ -6,8 +6,18 @@ public:
         long long divid = dividend;
         long long divis = divisor;
         bool neg = false;
+        if (dividend == 0)
+            return 0;
+        if (divisor == 1) {
+            return dividend;
+        }
+        if (divisor == -1) {
+            if (dividend == -2147483648)
+                return 2147483647;
+            return -dividend;
+        }
         if (divid < 0 || divis < 0) {
-            if(!(divid < 0 && divis < 0)){
+            if (!(divid < 0 && divis < 0)) {
                 neg = true;
             }
             if (divid < 0) {
@@ -17,15 +27,8 @@ public:
                 divis = -divis;
             }
         }
-        if(divid == INT_MAX && divis == 1){
-            if(neg){
-                return -divid;
-            }else{
-                return divid;
-            }
-        }
 
-        while (sum+divis <= divid) {
+        while (sum + divis <= divid) {
             sum = sum + divis;
             ans++;
             if (ans > INT_MAX) {
