@@ -11,28 +11,23 @@
 class Solution {
 public:
     int numComponents(ListNode* head, vector<int>& nums) {
-        vector<int> travel;
-        ListNode* curr = head;
-        int sum = 0;
-        while(curr != NULL){
-            travel.push_back(curr->val);
-            curr = curr->next;
-        }
         unordered_map<int,bool> mp;
         for(int i=0;i<nums.size();i++){
             mp[nums[i]] = true;
         }
-        bool nya = true; 
+        bool add = true;
         int ans = 0;
-        for(int i=0;i<travel.size();i++){
-            if(mp[travel[i]]){
-                if(nya){
-                    nya = false;
+        ListNode* curr = head;
+        while(curr != NULL){
+            if(mp[curr->val]){
+                if(add){
                     ans++;
+                    add = false;
                 }
             }else{
-                nya = true;
+                add = true;
             }
+            curr = curr->next;
         }
         return ans;
     }
