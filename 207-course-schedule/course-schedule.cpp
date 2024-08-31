@@ -1,51 +1,33 @@
 class Solution {
 public:
-    void solve(int x,vector<vector<int> > &adjList,vector<bool> &visited,stack<int> &st){
-        visited[x] = true;
-
-        for(int i = 0;i<adjList[x].size();i++){
-            if(!visited[adjList[x][i]]){
-                solve(adjList[x][i],adjList,visited,st);
-            }
-        }
-
-        st.push(x);
-    }
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int> > adjList(numCourses);
+        unordered_map<int,vector<int>> mp;
+        vector<int> inDegree(numCourses,0);
         for(int i = 0;i<prerequisites.size();i++){
             int u = prerequisites[i][0];
             int v = prerequisites[i][1];
-
-            adjList[u].push_back(v);
+            inDegree[u]++;
+            mp[v].push_back(u);
         }
 
-        vector<bool> visited(numCourses,false);
-        stack<int> st;
+        queue<int> q;
         for(int i = 0;i<numCourses;i++){
-            if(!visited[i]){
-                solve(i,adjList,visited,st);
+            if(inDegree[i] == 0){
+                q.push(i);
             }
         }
-        unordered_map<int,int> mp;
-        int s = numCourses-1;
-        vector<int> ans;
-        while(!st.empty()){
-            ans.push_back(st.top());
-            st.pop();
-        }
-        for(int i = 0;i<ans.size();i++){
-            mp[ans[i]] = i;
-        }
-        for(int i = 0;i<prerequisites.size();i++){
-            int u = prerequisites[i][0];
-            int v = prerequisites[i][1];
-
-            if(mp[v] <= mp[u]){
-                return false;
+        int ans=0;
+        while(!q.empty()){
+            int top = q.front();
+            q.pop();
+            ans++;
+            for(int i = 0;i<mp[top].size();i++){
+                inDegree[mp[top][i]]--;
+                if(inDegree[mp[top][i]] == 0){
+                    q.push(mp[top][i]);
+                }
             }
         }
-        return true;
+        return ans == numCourses;
     }
-
 };
