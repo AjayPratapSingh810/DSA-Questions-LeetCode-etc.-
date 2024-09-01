@@ -13,18 +13,26 @@ public:
                 }
             }
         }
+        for(int i=0;i<cols;i++){
+            for(int j=0;j<rows;j++){
+                if(j > 0){
+                    pre[j][i] = pre[j][i]+pre[j-1][i];
+                }
+            }
+        }
     }
     
     int sumRegion(int row1, int col1, int row2, int col2) {
-        int x = row1;
-        int y = col1;
         int sum  = 0;
-        for(x;x<=row2;x++){
-            if(col1 > 0){
-                sum = sum + pre[x][col2]-pre[x][col1-1];
-            }else{
-                sum = sum + pre[x][col2];
-            }
+        sum = sum+pre[row2][col2];
+        if(col1 > 0){
+            sum = sum - pre[row2][col1-1];
+        }
+        if(row1 > 0){
+            sum = sum - pre[row1-1][col2];
+        }
+        if(row1 > 0 && col1 > 0){
+            sum = sum + pre[row1-1][col1-1];
         }
         return sum;
     }
