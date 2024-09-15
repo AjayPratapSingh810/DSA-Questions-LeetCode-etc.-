@@ -10,26 +10,27 @@
  */
 class Solution {
 public:
-    void solve(ListNode* node){
-        ListNode* min = NULL;
-        int minVal = INT_MAX;
-        ListNode* temp = node;
-        while(temp != NULL){
-            if(temp->val < minVal){
-                minVal = temp->val;
-                min = temp;
-            }
-            temp = temp->next;
-        }
-        min->val = node->val;
-        node->val = minVal;
-    }
     ListNode* insertionSortList(ListNode* head) {
-        ListNode* temp = head;
-        while(temp != NULL){
-            solve(temp);
-            temp = temp->next;
+     vector<int> arr;
+     ListNode* temp = head;
+     while(temp != NULL){
+        arr.push_back(temp->val);
+        temp = temp->next;
+     }   
+
+     for(int i = 1;i<arr.size();i++){
+        for(int j = i;j>0;j--){
+            if(arr[j] < arr[j-1]){
+                swap(arr[j],arr[j-1]);
+            }
         }
-        return head;
+     }
+     temp = head;
+     int i = 0;
+     while(temp != NULL){
+        temp->val = arr[i++];
+        temp = temp->next;
+     }
+     return head;
     }
 };
