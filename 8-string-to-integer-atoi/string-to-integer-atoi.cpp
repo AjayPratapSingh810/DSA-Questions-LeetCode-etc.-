@@ -1,50 +1,45 @@
 class Solution {
 public:
     int myAtoi(string s) {
-        int i = 0;
+        if(s.length() == 0){
+            return 0;
+        }
         long long ans = 0;
-        for (i; i < s.length(); i++) {
-            if (s[i] == ' ') {
-                continue;
-            } else {
-                break;
-            }
+        int i = 0;
+        while(s[i] == ' '){
+            i++;
         }
         bool neg = false;
-        if (s[i] == '-') {
+        if(s[i] == '-'){
             neg = true;
             i++;
-        }
-        if (s[i] == '+') {
-            if (neg == true) {
-                return 0;
-            }
+        }else if(s[i] == '+'){
             i++;
         }
-        for (i; i < s.length(); i++) {
-            if (s[i] != '0') {
+        while(i<s.length()){
+            if(s[i] >= '0' && s[i] <= '9'){
+                int ch = s[i] - '0';
+                ans = ans*10 + ch;
+            }else{
                 break;
             }
-        }
-        for (i; i < s.length(); i++) {
-            if (s[i] >= '0' && s[i] <= '9') {
-                int a = s[i] - '0';
-                ans = ans * 10 + a;
-            } else {
-                break;
-            }
-            if (ans > INT_MAX) {
+            if(ans > INT_MAX){
                 if(neg){
                     return INT_MIN;
                 }
                 return INT_MAX;
             }
+            i++;
         }
-
-        if (neg) {
-            ans = 0 - ans;
+        if(ans > INT_MAX){
+            if(neg){
+                return INT_MIN;
+            }
+            return INT_MAX;
         }
-
+        if(neg){
+            return -ans;
+        }
         return ans;
     }
 };
