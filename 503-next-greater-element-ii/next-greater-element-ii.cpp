@@ -7,10 +7,6 @@ public:
         }
         vector<int> ans;
         for(int i=nums.size()-1;i>=0;i--){
-            if(st.empty()){
-                ans.push_back(-1);
-                continue;
-            }
             while(!st.empty() && st.top() <= nums[i]){
                 st.pop();
             }
