@@ -1,27 +1,34 @@
 class Solution {
 public:
-    void solve(vector<vector<int>> &ans,vector<int> arr,vector<int>& candidates,int target,int index,int sum){
-        if(sum > target){
+    void solve(int x,vector<int> &arr,int &sum,int target,vector<int> &candidates,set<vector<int> > &ans){
+        if(x >= candidates.size() || sum >= target){
+            if(sum == target){
+                ans.insert(arr);
+                return;
+            }
             return;
         }
-        else if(sum == target){
-            ans.push_back(arr);
-            return;
-        }
-        for(int i=index;i<candidates.size();i++){
-            arr.push_back(candidates[i]);
+
+        for(int i = x;i<candidates.size();i++){
             sum = sum + candidates[i];
-            solve(ans,arr,candidates,target,i,sum);
-            sum = sum-candidates[i];
+            arr.push_back(candidates[i]);
+            solve(i,arr,sum,target,candidates,ans);
+            sum = sum - candidates[i];
             arr.pop_back();
         }
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<vector<int>> ans;
-        vector<int> arr;
-        int index = 0;
-        sort(candidates.begin(),candidates.end());
-        solve(ans,arr,candidates,target,index,0);
+        set<vector<int> > a;
+        
+        for(int i=0;i<candidates.size();i++){
+            vector<int> arr;
+            int sum = 0;
+            solve(i,arr,sum,target,candidates,a);
+        }
+        vector<vector<int> > ans;
+        for(auto i : a){
+            ans.push_back(i);
+        }
         return ans;
     }
 };
