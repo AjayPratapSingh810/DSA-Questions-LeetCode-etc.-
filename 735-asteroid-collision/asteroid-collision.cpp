@@ -2,36 +2,47 @@ class Solution {
 public:
     vector<int> asteroidCollision(vector<int>& asteroids) {
         stack<int> st;
-        int i =0;
-        while(i<asteroids.size()){
-             if(!st.empty() && (st.top() >= 0 && asteroids[i] < 0)){
-                bool cond = false;
-                if(-asteroids[i] > st.top()){
-                    st.pop();
-                    cond = true;
-                }else if(-asteroids[i] == st.top()){
-                    st.pop();
-                }
-                if(!cond){
-                    i++;
-                }
-            }else{
+
+        for (int i = 0; i < asteroids.size(); i++) {
+            if (st.empty()) {
                 st.push(asteroids[i]);
-                i++;
+            } else {
+                int a = asteroids[i];
+                while (true) {
+                    if(st.empty()){
+                        break;
+                    }
+                    int top = st.top();
+                    st.pop();
+                    if (top >0 && a< 0&&abs(top) == abs(a)) {
+                        a = 0;
+                        break;
+                    }
+                    if (top > 0 && a < 0) {
+                        int t = abs(a);
+                        int x = max(top, t);
+                        if(x == t){
+                            a = -x;
+                        }else{
+                            a = x;
+                        }
+                    }else{
+                        st.push(top);
+                        break;
+                    }
+                }
+                if(a != 0){
+                    st.push(a);
+                }
             }
         }
         vector<int> ans;
-        while(!st.empty()){
-            ans.push_back(st.top());
+        while (!st.empty()) {
+            int top = st.top();
             st.pop();
+            ans.push_back(top);
         }
-        int s = 0;
-        int e = ans.size()-1;
-        while(s<e){
-            swap(ans[s],ans[e]);
-            s++;
-            e--;
-        }
+        reverse(ans.begin(), ans.end());
         return ans;
     }
 };
