@@ -11,38 +11,39 @@
  */
 class Solution {
 public:
-    void levelOrderTraversal(TreeNode* root,vector<vector<int>> &ans){
-        if (root == NULL) return;
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         queue<TreeNode*> q;
         q.push(root);
         q.push(NULL);
+        vector<vector<int> > ans;
         vector<int> arr;
+        if(root == NULL){
+            return ans;
+        }
+        int count = 0;
         while(!q.empty()){
             TreeNode* top = q.front();
             q.pop();
-
             if(top == NULL){
+                if(count%2 == 1){
+                    reverse(arr.begin(),arr.end());
+                }
                 ans.push_back(arr);
                 arr.clear();
-                if(!q.empty()){
+                if(q.size()){
                     q.push(NULL);
                 }
+                count++;
             }else{
                 arr.push_back(top->val);
-                if(top->left != NULL){
+                if(top->left){
                     q.push(top->left);
                 }
-                if(top->right != NULL){
+                if(top->right){
                     q.push(top->right);
                 }
             }
-        }
-    }
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-        vector<vector<int>> ans;
-        levelOrderTraversal(root,ans);
-        for(int i=1;i<ans.size();i+=2){
-            reverse(ans[i].begin(),ans[i].end());
+
         }
         return ans;
     }
