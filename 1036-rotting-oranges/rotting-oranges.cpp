@@ -1,57 +1,68 @@
 class Solution {
 public:
-    void solve(vector<vector<int>>& grid, int& ans, int i, int j) {
-        bool happen = false;
-        // up
-        if (i > 0) {
-            if (grid[i - 1][j] == 1) {
-                grid[i - 1][j] = 2;
-                happen = true;
-            }
-        }
-        // left
-        if (j > 0) {
-            if (grid[i][j - 1] == 1) {
-                grid[i][j - 1] = 2;
-                happen = true;
-            }
-        }
-        // down
-        if (i < grid.size() - 1) {
-            if (grid[i + 1][j] == 1) {
-                grid[i + 1][j] = 2;
-                happen = true;
-            }
-        }
-        // right
-        if (j < grid[i].size() - 1) {
-            if (grid[i][j + 1] == 1) {
-                grid[i][j + 1] = 2;
-                happen = true;
-            }
-        }
-    }
     int orangesRotting(vector<vector<int>>& grid) {
-        int ans = 0;
-        vector<vector<int>> gridCopy = grid;
-        bool happen = true;
-        while (happen) {
-            for (int i = 0; i < grid.size(); i++) {
-                for (int j = 0; j < grid[0].size(); j++) {
-                    if (grid[i][j] == 2) {
-                        solve(gridCopy, ans, i, j);
-                    }
+        // queue<pair<row,col>>
+        queue<pair<int, int>> q;
+        int n = grid.size();
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[i].size(); j++) {
+                if (grid[i][j] == 2) {
+                    pair<int, int> p;
+                    p.first = i;
+                    p.second = j;
+                    q.push(p);
                 }
             }
-            if (gridCopy != grid) {
-                grid = gridCopy;
-                ans++;
-            }else{
-                happen = false;
+        }
+        pair<int, int> pr;
+        pr.first = -1;
+        pr.second = -1;
+        q.push(pr);
+        int ans = 0;
+        while (!q.empty()) {
+            pair<int, int> top = q.front();
+            q.pop();
+            int x = top.first;
+            int y = top.second;
+            if (x == -1 && y == -1) {
+                if (!q.empty()) {
+                    ans++;
+                    q.push(pr);
+                }
+                continue;
+            }
+            if (x > 0 && grid[x - 1][y] == 1) {
+                grid[x - 1][y] = 2;
+                pair<int, int> p;
+                p.first = x - 1;
+                p.second = y;
+                q.push(p);
+            }
+
+            if (x < n - 1 && grid[x + 1][y] == 1) {
+                grid[x + 1][y] = 2;
+                pair<int, int> p;
+                p.first = x + 1;
+                p.second = y;
+                q.push(p);
+            }
+            if (y > 0 && grid[x][y - 1] == 1) {
+                grid[x][y - 1] = 2;
+                pair<int, int> p;
+                p.first = x;
+                p.second = y - 1;
+                q.push(p);
+            }
+            if (y < grid[x].size() - 1 && grid[x][y + 1] == 1) {
+                grid[x][y + 1] = 2;
+                pair<int, int> p;
+                p.first = x;
+                p.second = y + 1;
+                q.push(p);
             }
         }
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[0].size(); j++) {
+         for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[i].size(); j++) {
                 if (grid[i][j] == 1) {
                     return -1;
                 }
