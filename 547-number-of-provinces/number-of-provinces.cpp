@@ -1,33 +1,44 @@
 class Solution {
 public:
-    void solve(vector<vector<int>>& isConnected,vector<int> &visited,int s){
+    void solve(int x,vector<vector<int> > &adjList,vector<bool> &visited){
         queue<int> q;
-        q.push(s);
-        visited[s] = 1;
-
+        q.push(x);
+        visited[x] = true;
         while(!q.empty()){
             int top = q.front();
             q.pop();
 
-            for(int i=0;i<isConnected[top-1].size();i++){
-                if(isConnected[top-1][i] == 1 && visited[i+1] == -1){
-                    visited[i+1] = 1;
-                    q.push(i+1);
+            for(int i = 0;i<adjList[top].size();i++){
+                if(!visited[adjList[top][i]]){
+                    visited[adjList[top][i]] = true;
+                    q.push(adjList[top][i]);
                 }
             }
         }
     }
     int findCircleNum(vector<vector<int>>& isConnected) {
-        // in this we do bfs
-        int size = isConnected.size(); 
-        vector<int> visited(size+1,-1);
+        int n = isConnected.size();
+        vector<vector<int> > adjList(n);
+        for(int i =0 ;i<isConnected.size();i++){
+            for(int j = 0;j<isConnected[i].size();j++){
+                if(i == j){
+                    continue;
+                }
+                if(isConnected[i][j] == 1){
+                    adjList[i].push_back(j);
+                }
+            }
+        }
+
+        vector<bool> visited(isConnected.size(),false);
         int ans = 0;
-        for(int i = 1;i<=size;i++){
-            if(visited[i] == -1){
+        for(int i = 0;i<isConnected.size();i++){
+            if(visited[i] == false){
                 ans++;
-                solve(isConnected,visited,i);
+                solve(i,adjList,visited);
             }
         }
         return ans;
+
     }
 };
