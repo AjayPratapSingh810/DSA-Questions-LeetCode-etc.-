@@ -10,33 +10,43 @@
  */
 class Solution {
 public:
-    bool isPalindrome(ListNode* head) {
-        int count = 0;
+    ListNode* reverse(ListNode* head) {
+        ListNode* prev = nullptr;
         ListNode* curr = head;
-        while(curr != NULL){
-            curr = curr->next;
-            count++;
+        while (curr != nullptr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
         }
-        int mid = count/2;
-        stack<int> st;
-        curr = head;
-        while(mid){
-            st.push(curr->val);
-            curr = curr->next;
-            mid--;
+        return prev;
+    }
+    
+    bool isPalindrome(ListNode* head) {
+        if (!head || !head->next) return true; // Empty or single-node list is a palindrome.
+        
+        // Find the middle of the list.
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast->next != nullptr && fast->next->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
-        if(count%2 == 1){
-            curr = curr->next;
-        }
-        while(curr != NULL){
-            int top = st.top();
-            if(curr->val != top){
+        
+        // Reverse the second half of the list.
+        ListNode* secondHalf = reverse(slow->next);
+        slow->next = nullptr; // Split the list into two halves.
+        
+        // Compare the first and second halves.
+        ListNode* firstHalf = head;
+        while (secondHalf != nullptr) {
+            if (firstHalf->val != secondHalf->val) {
                 return false;
             }
-            curr = curr->next;
-            st.pop();
+            firstHalf = firstHalf->next;
+            secondHalf = secondHalf->next;
         }
+        
         return true;
-
     }
 };
