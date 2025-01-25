@@ -15,22 +15,15 @@ public:
         if(root == NULL){
             return NULL;
         }
-        if(root -> val == val){
+        if(root-> val == val){
             return root;
         }
-        TreeNode* l = NULL;
-        TreeNode* r = NULL;
-        if(root -> val > val){
-            l = searchBST(root->left,val); 
-        }else{
-            r = searchBST(root->right,val);
+        TreeNode* left = searchBST(root->left,val);
+        TreeNode* right = searchBST(root->right,val);
+        if(left){
+            return left;
         }
-        if(l == NULL && r != NULL){
-            return r;
-        }else if(l != NULL && r == NULL){
-            return l;
-        }else{
-            return NULL;
-        }
+        return right;
+
     }
 };
