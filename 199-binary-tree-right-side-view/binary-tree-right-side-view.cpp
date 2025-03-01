@@ -11,22 +11,22 @@
  */
 class Solution {
 public:
-    void traversal(TreeNode* root,int lvl,unordered_map<int,int> &ans){
+    void solve(int lvl,TreeNode* root,vector<int> &mp){
         if(root == NULL){
             return;
         }
-        traversal(root->left,lvl+1,ans);
-        ans[lvl] = root->val;
-        traversal(root->right,lvl+1,ans);
+        solve(lvl+1,root->left,mp);
+        mp[lvl]=root->val;
+        solve(lvl+1,root->right,mp);
     }
     vector<int> rightSideView(TreeNode* root) {
-        int lvl = 0;
-        unordered_map<int,int> mp;
-        traversal(root,lvl,mp);
-        int s = mp.size();
-        vector<int> ans(s);
+        vector<int> mp(100,INT_MAX);
+        solve(0,root,mp);
+        vector<int> ans;
         for(auto i:mp){
-            ans[i.first] = i.second;
+            if(i != INT_MAX){
+                ans.push_back(i);
+            }
         }
         return ans;
     }
