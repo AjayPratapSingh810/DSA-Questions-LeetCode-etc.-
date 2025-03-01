@@ -14,19 +14,24 @@ public:
     bool solve(TreeNode* root1,TreeNode* root2){
         if(root1 == NULL && root2 == NULL){
             return true;
-        }else if(root1 == NULL){
-            return false;
-        }else if(root2 == NULL){
+        }
+        if(root1 == NULL || root2 == NULL){
             return false;
         }
-        bool one = solve(root1->left,root2->right);
-        bool two = solve(root1->right,root2->left);
-        if(root1->val == root2->val && one && two){
-            return true;
+        if(root1->val != root2->val){
+            return false;
         }
-        return false;
+        bool first = solve(root1->left,root2->right);
+        bool second = solve(root1->right,root2->left);
+        if(!first || !second){
+            return false;
+        }
+        return true;
     }
     bool isSymmetric(TreeNode* root) {
+        if(root == NULL || (root->left == NULL && root->right == NULL)){
+            return true;
+        }
         return solve(root->left,root->right);
     }
 };
