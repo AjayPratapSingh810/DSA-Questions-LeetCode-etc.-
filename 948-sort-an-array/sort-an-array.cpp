@@ -1,51 +1,39 @@
 class Solution {
 public:
-    vector<int> solve(vector<int>& nums){
+    vector<int> sortArray(vector<int>& nums) {
         if (nums.size() <= 1) {
             return nums;
         }
-
-        int mid = nums.size() / 2;
-        vector<int> arr1(mid);
-        vector<int> arr2(nums.size() - mid);
-
-        for (int i = 0; i < mid; ++i) {
-            arr1[i] = nums[i];
+        int s = 0;
+        int e = nums.size() - 1;
+        int mid = (s + e) / 2;
+        vector<int> a(mid + 1);
+        vector<int> b(e - mid);
+        for (int i = 0; i <= mid; i++) {
+            a[i] = nums[i];
         }
-        for (int i = mid; i < nums.size(); ++i) {
-            arr2[i - mid] = nums[i];
+        for (int j = mid + 1; j <= e; j++) {
+            b[j - (mid + 1)] = nums[j];
         }
-
-        vector<int> leftArray = solve(arr1);
-        vector<int> rightArray = solve(arr2);
-
-        vector<int> ans;
-        int start1 = 0, start2 = 0;
-
-        while (start1 < leftArray.size() && start2 < rightArray.size()) {
-            if (leftArray[start1] < rightArray[start2]) {
-                ans.push_back(leftArray[start1]);
-                start1++;
+        vector<int> v1 = sortArray(a);
+        vector<int> v2 = sortArray(b);
+        int i = 0;
+        int j = 0;
+        vector<int> ans(nums.size());
+        int r = 0;
+        while (i < v1.size() && j < v2.size()) {
+            if (v1[i] < v2[j]) {
+                ans[r++] = v1[i++];
             } else {
-                ans.push_back(rightArray[start2]);
-                start2++;
+                ans[r++] = v2[j++];
             }
         }
-
-        while (start1 < leftArray.size()) {
-            ans.push_back(leftArray[start1]);
-            start1++;
+        while (i < v1.size()) {
+            ans[r++] = v1[i++];
         }
-
-        while (start2 < rightArray.size()) {
-            ans.push_back(rightArray[start2]);
-            start2++;
+        while (j < v2.size()) {
+            ans[r++] = v2[j++];
         }
-
-        return ans;
-    }
-    vector<int> sortArray(vector<int>& nums) {
-        vector<int> ans = solve(nums);
         return ans;
     }
 };
