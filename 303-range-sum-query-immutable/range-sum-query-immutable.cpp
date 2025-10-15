@@ -1,14 +1,14 @@
 class NumArray {
 public:
-    vector<int> n;
+    vector<int> arr;
     NumArray(vector<int>& nums) {
-        n = nums;
+        arr = nums;
     }
     
     int sumRange(int left, int right) {
         int sum = 0;
-        for(int i= left;i<=right;i++){
-            sum = sum + n[i];
+        for(int i = left;i<=right;i++){
+            sum += arr[i];
         }
         return sum;
     }
