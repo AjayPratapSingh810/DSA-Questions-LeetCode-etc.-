@@ -15,18 +15,16 @@ public:
         if(p == NULL && q == NULL){
             return true;
         }
-        if(p == NULL || q == NULL){
+        if((p == NULL && q!= NULL) || (p != NULL && q == NULL) || (p && q && p->val != q->val)){
             return false;
         }
-        if(p->val != q->val){
-            return false;
-        }
-        bool leftside = isSameTree(p->left,q->left);
-        bool rightside = isSameTree(p->right,q->right);
+        
+        bool a = isSameTree(p->left,q->left);
+        bool b = isSameTree(p->right,q->right);
 
-        if(!leftside || !rightside){
-            return false;
+        if(a && b){
+            return true;
         }
-        return true;
+        return false;
     }
 };
