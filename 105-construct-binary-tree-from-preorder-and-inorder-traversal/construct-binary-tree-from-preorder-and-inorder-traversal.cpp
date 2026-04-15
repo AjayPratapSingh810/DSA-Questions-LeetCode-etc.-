@@ -11,28 +11,26 @@
  */
 class Solution {
 public:
-    int findIndex(int val,vector<int> inorder){
-        for(int i=0;i<inorder.size();i++){
-            if(val == inorder[i]){
-                return i;
-            }
-        }
-        return -1;
-    }
-    TreeNode* solve(TreeNode* root,int &index,vector<int> &preorder,vector<int> &inorder,int l,int r){
-        if(l>r || index >= preorder.size()){
+    TreeNode* solve(vector<int>& preorder, vector<int>& inorder, int &index,int x, int y){
+        if(index >= inorder.size() || x>y){
             return NULL;
         }
-        int indi = findIndex(preorder[index],inorder);
-        root = new TreeNode(preorder[index++]);
-
-        root->left = solve(root->left,index,preorder,inorder,l,indi-1);
-        root->right = solve(root->right,index,preorder,inorder,indi+1,r);
+        TreeNode* root = new TreeNode(preorder[index]);
+        int k = 0;
+        for(int i = 0;i<inorder.size();i++){
+            if(inorder[i] == preorder[index]){
+                k = i;
+                break;
+            }
+        }
+        index++;
+        root->left = solve(preorder,inorder,index,x,k-1);
+        root->right = solve(preorder,inorder,index,k+1,y);
         return root;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        TreeNode* root;
+        int n = preorder.size();
         int index = 0;
-        return solve(root,index,preorder,inorder,0,preorder.size()-1);
+        return solve(preorder,inorder,index,0,n-1);
     }
 };
