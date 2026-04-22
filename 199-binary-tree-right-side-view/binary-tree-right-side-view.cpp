@@ -11,23 +11,20 @@
  */
 class Solution {
 public:
-    void solve(int lvl,TreeNode* root,vector<int> &mp){
+    void solve(TreeNode* root, int lvl, vector<int> &ans){
         if(root == NULL){
             return;
         }
-        solve(lvl+1,root->left,mp);
-        mp[lvl]=root->val;
-        solve(lvl+1,root->right,mp);
+        if(ans.size() <= lvl){
+            ans.push_back(0);
+        }
+        ans[lvl] = root->val;
+        solve(root->left,lvl+1,ans);
+        solve(root->right,lvl+1,ans);
     }
     vector<int> rightSideView(TreeNode* root) {
-        vector<int> mp(100,INT_MAX);
-        solve(0,root,mp);
         vector<int> ans;
-        for(auto i:mp){
-            if(i != INT_MAX){
-                ans.push_back(i);
-            }
-        }
+        solve(root,0,ans);
         return ans;
     }
 };
