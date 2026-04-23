@@ -11,24 +11,23 @@
  */
 class Solution {
 public:
-    int solve(TreeNode* root,int &ans){
+    int solve(TreeNode* root, int &ans){
         if(root == NULL){
             return 0;
         }
         int left = max(0,solve(root->left,ans));
         int right = max(0,solve(root->right,ans));
-
-        int sum = left +right + root->val;
-        if(sum > ans){
-            ans = sum;
+        if(left+right+root->val  > ans){
+            ans = left+right+root->val;
         }
-        return max(left,right) + root->val;
-
+        return max(left,right)+root->val;
     }
     int maxPathSum(TreeNode* root) {
-        int sum = 0;
         int ans = INT_MIN;
-        int sol = solve(root,ans);
-        return max(sol,ans);
+        int a = solve(root,ans);
+        if(a > ans){
+            return a;
+        }
+        return ans;
     }
 };
