@@ -1,69 +1,50 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        // queue<pair<row,col>>
-        queue<pair<int, int>> q;
+        queue<pair<int,int>> q;
         int n = grid.size();
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[i].size(); j++) {
-                if (grid[i][j] == 2) {
-                    pair<int, int> p;
-                    p.first = i;
-                    p.second = j;
-                    q.push(p);
+        int m = grid[0].size();
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<m;j++){
+                if(grid[i][j] == 2){
+                    q.push(make_pair(i,j));
                 }
             }
         }
-        pair<int, int> pr;
-        pr.first = -1;
-        pr.second = -1;
-        q.push(pr);
+        q.push(make_pair(-1,-1));
         int ans = 0;
-        while (!q.empty()) {
-            pair<int, int> top = q.front();
+        while(!q.empty()){
+            pair<int,int> p = q.front();
             q.pop();
-            int x = top.first;
-            int y = top.second;
-            if (x == -1 && y == -1) {
-                if (!q.empty()) {
+            if(p.first == -1 && p.second == -1){
+                if(!q.empty()){
+                    q.push(make_pair(-1,-1));
                     ans++;
-                    q.push(pr);
                 }
-                continue;
-            }
-            if (x > 0 && grid[x - 1][y] == 1) {
-                grid[x - 1][y] = 2;
-                pair<int, int> p;
-                p.first = x - 1;
-                p.second = y;
-                q.push(p);
-            }
-
-            if (x < n - 1 && grid[x + 1][y] == 1) {
-                grid[x + 1][y] = 2;
-                pair<int, int> p;
-                p.first = x + 1;
-                p.second = y;
-                q.push(p);
-            }
-            if (y > 0 && grid[x][y - 1] == 1) {
-                grid[x][y - 1] = 2;
-                pair<int, int> p;
-                p.first = x;
-                p.second = y - 1;
-                q.push(p);
-            }
-            if (y < grid[x].size() - 1 && grid[x][y + 1] == 1) {
-                grid[x][y + 1] = 2;
-                pair<int, int> p;
-                p.first = x;
-                p.second = y + 1;
-                q.push(p);
+            }else{
+                int a = p.first;
+                int b = p.second;
+                if(a > 0 && grid[a-1][b] == 1){
+                    grid[a-1][b] = 2;
+                    q.push(make_pair(a-1,b));
+                }
+                if(a < n-1 && grid[a+1][b] == 1){
+                    grid[a+1][b] = 2;
+                    q.push(make_pair(a+1,b));
+                }
+                if(b > 0 && grid[a][b-1] == 1){
+                    grid[a][b-1] = 2;
+                    q.push(make_pair(a,b-1));
+                }
+                if(b < m-1 && grid[a][b+1] == 1){
+                    grid[a][b+1] = 2;
+                    q.push(make_pair(a,b+1));
+                }
             }
         }
-         for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[i].size(); j++) {
-                if (grid[i][j] == 1) {
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<m;j++){
+                if(grid[i][j] == 1){
                     return -1;
                 }
             }
