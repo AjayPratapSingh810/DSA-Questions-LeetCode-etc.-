@@ -20,7 +20,7 @@ public:
 */
 
 class Solution {
-    private:
+private:
     unordered_map<Node*, Node*> visited;
 public:
     Node* solveDfs(Node* node){
@@ -30,7 +30,7 @@ public:
         if (visited.find(node) != visited.end()) {
             return visited[node];
         }
-        Node*temp = new Node(node->val);
+        Node* temp = new Node(node->val);
         visited[node] = temp;
         for (auto neighbor : node->neighbors) {
             temp->neighbors.push_back(solveDfs(neighbor));
